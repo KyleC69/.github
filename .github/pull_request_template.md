@@ -1,10 +1,10 @@
 ## Summary
-- Describe changes
+
 Describe the change and why it is needed.
 
 ## Changes
 
-- 
+- Describe changes
 
 ## Validation
 
