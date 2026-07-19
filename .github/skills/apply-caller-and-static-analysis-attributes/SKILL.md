@@ -15,14 +15,15 @@ Use optional parameters decorated with caller info attributes from `System.Runti
 - `[CallerMemberName]`
 - `[CallerFilePath]`
 - `[CallerLineNumber]`
-- `[CallerArgumentExpression]` (C# 10+)
+- `[CallerArgumentExpression]` (C# 10+ and .NET 6+ unless the attribute is polyfilled)
 
 Guidelines:
 
 1. Add caller info only where it has clear diagnostic value (logging, guard helpers, telemetry, exception helpers).
-2. Keep parameters optional and defaulted so existing call sites do not change.
-3. Avoid exposing full file paths in user-facing error messages unless explicitly intended.
-4. Prefer storing caller info for structured diagnostics rather than building brittle string formats.
+2. Use the expected parameter shapes: `string` for member name, file path, and argument expression; `int` for line number.
+3. Keep caller info parameters optional and defaulted so existing call sites do not change (`= ""` for `string`, `= 0` for `int`).
+4. Avoid exposing full file paths in user-facing error messages unless explicitly intended.
+5. Prefer storing caller info for structured diagnostics rather than building brittle string formats.
 
 ## Static analysis attributes
 
@@ -31,6 +32,7 @@ Use attributes from `System.Diagnostics.CodeAnalysis` to describe postconditions
 - Null-state contracts: `[NotNull]`, `[MaybeNull]`, `[AllowNull]`, `[DisallowNull]`
 - Conditional null-state: `[NotNullWhen]`, `[MaybeNullWhen]`, `[NotNullIfNotNull]`
 - Member state: `[MemberNotNull]`, `[MemberNotNullWhen]`
+- Member initialization contracts: `[SetsRequiredMembers]` on constructors that fully initialize all `required` members
 - Control-flow intent: `[DoesNotReturn]`, `[DoesNotReturnIf]`
 
 Guidelines:
